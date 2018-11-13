@@ -12,7 +12,16 @@ var config = {
   var database = firebase.database();
 
 // Add button for adding trains
+$("#add-train-btn").on("click", function(event) {
+    event.preventDefault();
+
     //   Grabs user input
+    var trainName = $("#train-name-input").val().trim();
+    var destination = $("#destination-input").val().trim();
+    var firstTrain = moment($("#first-train-input").val().trim(), "hh:mm").format();
+    var frequency = $("#frequency-input").val().trim();
+
+})
     //   Create local "temporary" object for holding train data
     //   Upload train data to the database
     //   Log everything to console
@@ -26,4 +35,3 @@ var config = {
     // Calculate minutes until arrival
     // Create the new row
     // Append the new row to the table
-    
