@@ -61,12 +61,13 @@ database.ref().on("child_added", function(childSnapshot) {
     console.log(firstTrain);
     console.log(frequency);
 
-    // Change train time to unix w/ moment
+    // Change first train time to unix w/ moment
     var firstTrainPretty = moment.unix(firstTrain).format("HH:mm");
 
-    // Calculate next arrival time based on frequency
+    // Calculate next arrival time by adding frequency to firs train time
+    var nextArrivalTime = moment().add(moment())
     
-    // Calculate minutes until arrival based on next arrival time and current time
+    // Calculate minutes until arrival by calculating difference between nextArrivalTime and currenttime
     var minToArrive = moment().diff(moment(firstTrain, "X"), "HH:mm");
     console.log(minToArrive);
 
