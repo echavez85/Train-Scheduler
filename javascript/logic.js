@@ -18,20 +18,67 @@ $("#add-train-btn").on("click", function(event) {
     //   Grabs user input
     var trainName = $("#train-name-input").val().trim();
     var destination = $("#destination-input").val().trim();
-    var firstTrain = moment($("#first-train-input").val().trim(), "hh:mm").format();
+    var firstTrain = moment($("#first-train-input").val().trim(), "HH:mm").format();
     var frequency = $("#frequency-input").val().trim();
 
-})
     //   Create local "temporary" object for holding train data
+    var newTrain = {
+        name: trainName,
+        destination: destination,
+        firstTrain: firstTrain,
+        frequency: frequency
+    };
     //   Upload train data to the database
+    database.ref().push(newTrain);
+
     //   Log everything to console
+    console.log(newTrain.trainName);
+    console.log(newTrain.destination);
+    console.log(newTrain.firstTrain);
+    console.log(newTrain.frequency);
+
+    alert("Train has been added to the scheduler");
+
     //   Clear all of the input boxes
-    
-    
+    $("#train-name-input").val("");
+    $("#destination-input").val("");
+    $("#first-train-input").val("");
+    $("#frequency-input").val("");
+});
+        
 // Create Firebase event for adding train to the database and a row in the html when a user adds an entry
+database.ref().on("child_added", function(childSnapshot) {
+
     // Store everything into a variable
+    var trainName = childSnapshot.val().trainName;
+    var destination = childSnapshot.val().destination;
+    var firstTrain = childSnapshot.val().firstTrain;
+    var frequency = childSnapshot.val().frequency;
+
     // Console log the train info
-    // Chance train time to unix w/ moment
-    // Calculate minutes until arrival
+    console.log(trainName);
+    console.log(destination);
+    console.log(firstTrain);
+    console.log(frequency);
+
+    // Change train time to unix w/ moment
+    var firstTrainPretty = moment.unix(firstTrain).format("HH:mm");
+
+    // Calculate next arrival time based on frequency
+    
+    // Calculate minutes until arrival based on next arrival time and current time
+    var minToArrive = moment().diff(moment(firstTrain, "X"), "HH:mm");
+    console.log(minToArrive);
+
     // Create the new row
+    var newRow = $("<tr>").append(
+        $("<td>").text(trainName),
+        $("<td>").text(destination),
+        $("<td>").text(firstTrain),
+        $("<td>").text(frequency),
+        $("<td>").text(nextArrival),
+        $("<td>").text(minToArrival)
+    );
     // Append the new row to the table
+    $("#train-schedule-table > tbody").append(newRow);
+});
