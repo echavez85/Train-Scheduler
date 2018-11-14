@@ -32,7 +32,7 @@ $("#add-train-btn").on("click", function(event) {
     database.ref().push(newTrain);
 
     //   Log everything to console
-    console.log(newTrain.trainName);
+    console.log(newTrain.name);
     console.log(newTrain.destination);
     console.log(newTrain.firstTrain);
     console.log(newTrain.frequency);
@@ -50,7 +50,7 @@ $("#add-train-btn").on("click", function(event) {
 database.ref().on("child_added", function(childSnapshot) {
 
     // Store everything into a variable
-    var trainName = childSnapshot.val().trainName;
+    var trainName = childSnapshot.val().name;
     var destination = childSnapshot.val().destination;
     var firstTrain = childSnapshot.val().firstTrain;
     var frequency = childSnapshot.val().frequency;
@@ -65,9 +65,10 @@ database.ref().on("child_added", function(childSnapshot) {
     var firstTrainPretty = moment.unix(firstTrain).format("HH:mm");
 
     // Calculate next arrival time by adding frequency to firs train time
-    var nextArrivalTime = moment().add(moment())
+    var nextArrival = moment.unix(firstTrain).add(frequency, "m");
+    console.log(nextArrival);
     
-    // Calculate minutes until arrival by calculating difference between nextArrivalTime and currenttime
+    // Calculate minutes until arrival by calculating difference between nextArrivalTime and current time
     var minToArrive = moment().diff(moment(firstTrain, "X"), "HH:mm");
     console.log(minToArrive);
 
@@ -78,7 +79,7 @@ database.ref().on("child_added", function(childSnapshot) {
         $("<td>").text(firstTrain),
         $("<td>").text(frequency),
         $("<td>").text(nextArrival),
-        $("<td>").text(minToArrival)
+        $("<td>").text(minToArrive)
     );
     // Append the new row to the table
     $("#train-schedule-table > tbody").append(newRow);
