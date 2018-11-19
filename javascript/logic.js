@@ -61,24 +61,32 @@ database.ref().on("child_added", function(childSnapshot) {
     console.log(firstTrain);
     console.log(frequency);
 
-    // Change first train time to unix w/ moment
-    var firstTrainPretty = moment.unix(firstTrain).format("HH:mm");
+    // First Time with one year subtracted
+    var convertedStartTime = moment(firstTrain, "hh:mm").subtract(1, "years");
 
-    // Calculate next arrival time by adding frequency to firs train time
-    var nextArrival = moment.unix(firstTrain).add(frequency, "m");
-    console.log(nextArrival);
+    //Current Time
+    var currentTime = moment();
     
-    // Calculate minutes until arrival by calculating difference between nextArrivalTime and current time
-    var minToArrive = moment().diff(moment(firstTrain, "X"), "HH:mm");
-    console.log(minToArrive);
+    // Difference between times
+    var diffTime = moment().diff(moment(convertedStartTime), "minutes");
+
+    // Time apart
+    var timeRemainder = diffTime % frequency;
+
+    // Minutes to next train
+    var minutesToTrain = frequency - timeRemainder;
+
+    // Calculate next arrival time by adding frequency to first train time
+    var nextArrival = moment().add(minutesToTrain, "minutes");
+    var nextTrainTime = moment(nextArrival).format("HH:mm");
 
     // Create the new row
     var newRow = $("<tr>").append(
         $("<td>").text(trainName),
         $("<td>").text(destination),
         $("<td>").text(frequency),
-        $("<td>").text(nextArrival),
-        $("<td>").text(minToArrive)
+        $("<td>").text(nextTrainTime),
+        $("<td>").text(minutesToTrain)
     );
     // Append the new row to the table
     $("#train-schedule-table > tbody").append(newRow);
