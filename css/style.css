@@ -1,0 +1,13 @@
+.jumbotron {
+    text-align: center;
+    background-color: lightseagreen;
+}
+
+.card-header {
+    background-color: lightseagreen;
+}
+
+.btn {
+    background-color: lightseagreen;
+    color: black;
+}
